@@ -80,7 +80,7 @@ def convert_to_can_message(
     # Update last_position for the axis
     last_positions[axis_id - 1] = position * gear_ratio
 
-    return can_id + "F5" + speed_hex + "02" + rel_position_hex
+    return can_id + "F5" + speed_hex + "E6" + rel_position_hex
 
 
 def process_tap_files() -> None:
@@ -93,7 +93,7 @@ def process_tap_files() -> None:
         if filename.endswith(".tap"):
             input_filename = os.path.join(script_dir, filename)
             output_filename = os.path.join(
-                script_dir, os.path.splitext(filename)[0] + ".txt"
+                script_dir, os.path.splitext("canbus")[0] + ".txt"
             )
 
             with open(input_filename, "r") as input_file, open(

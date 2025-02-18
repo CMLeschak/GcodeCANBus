@@ -96,6 +96,7 @@ def can_send_messages(bus: can.interface.Bus, messages: List[can.Message]) -> No
             print(
                 f"Received: arbitration_id=0x{received_msg.arbitration_id:X}, data=[{received_data_bytes}], is_extended_id=False"
             )
+
             if received_msg.arbitration_id in expected_responses:
                 received_responses.add(received_msg.arbitration_id)
         if received_responses == expected_responses:
@@ -107,6 +108,8 @@ def can_send_messages(bus: can.interface.Bus, messages: List[can.Message]) -> No
                     "Responses received for all expected motors with status 2. Moving to the next set of messages."
                 )
                 break
+        else:
+            break
         if time.time() - start_time > timeout:
             print("Timeout waiting for responses from expected motors with status 2.")
             break
@@ -123,7 +126,7 @@ def main() -> None:
         return
     selected_file = txt_files[0]
     file_path = os.path.join(script_directory, selected_file)
-    bus = can.interface.Bus(bustype="slcan", channel="/dev/ttyACM0", bitrate=500000)
+    bus = can.interface.Bus(interface="slcan", channel="COM3", bitrate=500000) #/dev/ttyACM0
     with open(file_path, "r") as file:
         lines = file.readlines()
     message_sets = [lines[i : i + 6] for i in range(0, len(lines), 6)]
